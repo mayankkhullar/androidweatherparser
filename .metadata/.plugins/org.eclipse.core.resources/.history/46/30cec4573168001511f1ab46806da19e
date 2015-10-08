@@ -1,0 +1,9 @@
+package com.mayank.myapp;
+
+public class XMLCollected {
+int temp = 0;
+String city = "";
+public void setcity(String c)
+city=c;
+
+}

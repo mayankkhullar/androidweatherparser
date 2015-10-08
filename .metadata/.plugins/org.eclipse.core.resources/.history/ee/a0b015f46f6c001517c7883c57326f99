@@ -1,0 +1,32 @@
+package com.mayank.myapp;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class HandlingXMLStuff extends DefaultHandler {
+XMLCollected info = new XMLCollected();
+	@Override
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException {
+		// TODO Auto-generated method stub
+		if(localName.equals("city"))
+		{
+			String city = attributes.getValue("data");
+			info.setcity(city);
+		}else if(localName.equals("temprature"))
+		{
+			String t = attributes.getValue("value");
+			Integer temp = Integer.parseInt(t);
+			info.setTemp(temp);
+
+		
+			
+		}
+	}
+	public String getInformation() {
+		// TODO Auto-generated method stub
+		return info.datatostring();
+	}
+
+}

@@ -1,0 +1,15 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class co {
+public static void main(String[] args)
+{
+	ArrayList<String> news = new ArrayList<String>();
+	news.add("t" , "ty") ;
+	int a = 2;
+	String ty = Integer.toString(a);
+	System.out.print(news);
+	
+}
+}

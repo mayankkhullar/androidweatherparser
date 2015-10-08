@@ -1,0 +1,83 @@
+package com.mayank.myapp;
+
+import java.net.URL;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class ParseXML extends Activity implements OnClickListener {
+TextView result;
+EditText state, city;
+Button submit;
+String Baseurl = "http://api.openweathermap.org/data/2.5/weather?q=";
+String url2 = "&mode=xml";
+String ci , st;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.parsexml);
+		initializevars();
+		
+	}
+public void initializevars(){
+	result = (TextView) findViewById(R.id.tvTemp);
+	city =(EditText) findViewById(R.id.etCity);
+	state =(EditText) findViewById(R.id.etState);
+	submit=(Button) findViewById(R.id.bResulr);	
+	submit.setOnClickListener(this);
+	
+}
+@Override
+public void onClick(View arg0) {
+	// TODO Auto-generated method stub
+	
+	String ci = city.getText().toString();
+	String st= state.getText().toString();
+	
+}
+	//runOnUiThread(new Runnable()
+//{@Override
+//	public void run()
+	//	{
+public void get()
+{
+	
+			try{
+				
+				StringBuilder URL = new StringBuilder(Baseurl);
+				URL.append(ci + url2);
+				String FullUrl = URL.toString();
+				URL website = new URL(FullUrl);
+				
+				SAXParserFactory spf =  SAXParserFactory.newInstance();
+				SAXParser sp = spf.newSAXParser();
+				XMLReader xr = sp.getXMLReader();
+				HandlingXMLStuff doing = new HandlingXMLStuff();
+				xr.setContentHandler(doing);
+				xr.parse(new InputSource(website.openStream()));
+				String information = doing.getInformation();
+				result.setText(information);
+			}catch(Exception e)
+			{
+				result.setText("err");
+			}
+		//}
+	//});
+	
+	
+}
+}
+
+

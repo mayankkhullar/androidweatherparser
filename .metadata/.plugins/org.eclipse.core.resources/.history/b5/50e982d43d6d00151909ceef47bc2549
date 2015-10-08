@@ -1,0 +1,81 @@
+package com.example.xmlpull;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+
+import android.app.Activity;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class Networking extends Activity  {
+ 
+TextView TvTemp;
+String baseurl = "http://api.openweathermap.org/data/2.5/weather?q=";
+String url = "&mode=xml";
+String city;
+public EditText etcity;
+
+XMLResponseHandler obj = new XMLResponseHandler();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		 etcity = (EditText) findViewById(R.id.etCity);
+			final Button loadButton = (Button) findViewById(R.id.bShow);
+			loadButton.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					
+					new Task().execute();
+					
+				}
+			});
+				}
+			
+	class Task extends AsyncTask<Void , Void, Void> 
+	{
+		String baseurl = "http://api.openweathermap.org/data/2.5/weather?q=delhi&mode=xml";
+		AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
+		
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			// TODO Auto-generated method stub
+		//StringBuilder urls = new StringBuilder(baseurl);
+			//urls.append(city + url);
+			//String FullUrl = urls.toString();
+			HttpGet request = new HttpGet(baseurl);
+			XMLResponseHandler responseHandler = new XMLResponseHandler();
+			try {
+				return mClient.execute(request, responseHandler);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			if (null != mClient)
+				mClient.close();
+			
+			etcity.setText(result);
+		}
+		
+		}
+}
+	
+	
+
+	
+

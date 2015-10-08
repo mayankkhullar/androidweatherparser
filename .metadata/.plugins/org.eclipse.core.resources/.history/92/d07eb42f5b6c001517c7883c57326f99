@@ -1,0 +1,5 @@
+package com.mayank.myapp;
+
+public class HandlingXMLStuff extends DefaultHandler {
+
+}

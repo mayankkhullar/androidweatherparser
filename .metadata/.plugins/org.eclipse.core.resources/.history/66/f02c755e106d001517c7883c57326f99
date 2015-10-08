@@ -1,0 +1,71 @@
+package com.example.xmlpull;
+
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+
+import android.app.Activity;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends Activity implements OnClickListener {
+EditText etCity; 
+TextView TvTemp;
+Button B;
+String baseurl = "http://api.openweathermap.org/data/2.5/weather?q=";
+String url = "&mode=xml";
+String city;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		etCity = (EditText) findViewById(R.id.etCity);
+		TvTemp = (TextView)findViewById(R.id.tvTemp);
+		B = (Button) findViewById(R.id.bShow);
+		B.setOnClickListener(this);
+		new Task().execute();
+		
+	}
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		String city = etCity.getText().toString();
+		StringBuilder urls = new StringBuilder(baseurl);
+		urls.append(city + url);
+		String FullUrl = url.toString();
+	}
+	class Task extends AsyncTask<Void , Void, Void> 
+	{
+		AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
+		
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			// TODO Auto-generated method stub
+			StringBuilder urls = new StringBuilder(baseurl);
+			urls.append(city + url);
+			String FullUrl = url.toString();
+			HttpGet request = new HttpGet(FullUrl);
+			XMLResponseHandler responseHandler = new XMLResponseHandler();
+			try {
+				return mClient.execute(request, responseHandler);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		}
+		
+	}
+	
+
+	
+

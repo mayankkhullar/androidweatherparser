@@ -1,0 +1,10 @@
+import java.util.List;
+
+
+public class co {
+public static void main(String[] args)
+{
+	List<String> news = new List<String>();
+	news.add("1" , 2);
+}
+}

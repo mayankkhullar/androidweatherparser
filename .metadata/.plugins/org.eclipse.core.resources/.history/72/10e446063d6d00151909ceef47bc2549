@@ -1,0 +1,94 @@
+package com.example.xmlpull;
+
+
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+class XMLResponseHandler implements ResponseHandler<Void> {
+	
+		public String temperature = "temperature";
+	  public volatile boolean parsingComplete = true;
+	
+	  public String getTemperature(){
+	      return temperature;
+	   }
+	  public String setTemperature(String s)
+	  {
+		  this.temperature = s;
+	  }
+
+	private static final String Country_TAG = "country";
+	
+	
+	XmlPullParser xpp;
+	@Override
+	public Void handleResponse(HttpResponse response)
+			throws ClientProtocolException, IOException {
+		try {
+
+			// Create the Pull Parser
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			 xpp = factory.newPullParser();
+
+			// Set the Parser's input to be the XML document in the HTTP Response
+			xpp.setInput(new InputStreamReader(response.getEntity()
+					.getContent()));
+			
+			// Get the first Parser event and start iterating over the XML document 
+			int eventType = xpp.getEventType();
+
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				String name = xpp.getName();
+				switch(eventType)
+				{
+				 case XmlPullParser.START_TAG:
+		               break;
+				 case XmlPullParser.TEXT:
+		               String text = xpp.getText();
+		               break;
+				case XmlPullParser.END_TAG:
+					 if(name.equals("temperature")){
+		                  temperature = xpp.getAttributeValue(null,"value");
+		               }else
+		            	   
+		            	   break;
+
+				}
+			//	if (eventType == XmlPullParser.START_TAG) {
+				//	startTag(xpp.getName());
+			//	} else if (eventType == XmlPullParser.END_TAG) {
+				//	endTag(xpp.getName());
+			//	} else if (eventType == XmlPullParser.TEXT) {
+				//	text(xpp.getText());
+			//	}
+				eventType = xpp.next();
+			}
+			parsingComplete = false;
+			//return mResults;
+		} catch (XmlPullParserException e) {
+		}
+		return null;
+		
+	}
+
+	
+
+			
+		//else if (localName.equals("city")) {
+			//mResults.add(mcountry+ mtemp);
+			
+		//	mcountry= null;
+			//mtemp=null;
+			}
+		
+	

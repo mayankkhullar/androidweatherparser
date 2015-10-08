@@ -1,0 +1,97 @@
+package com.example.xmlpull;
+
+
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+class XMLResponseHandler implements ResponseHandler<List<String>> {
+	
+	private String temperature = "temperature";
+	 public String getTemperature(){
+	      return temperature;
+	   }
+
+	private static final String Country_TAG = "country";
+	//private static final String LONGITUDE_TAG = "lng";
+	//private static final String LATITUDE_TAG = "lat";
+	private String mcountry, mMag;
+	String mtemp;
+	String mt;
+	
+	private boolean mIscountry , mistemp;
+	private final List<String> mResults = new ArrayList<String>();
+	XmlPullParser xpp;
+	@Override
+	public List<String> handleResponse(HttpResponse response)
+			throws ClientProtocolException, IOException {
+		try {
+
+			// Create the Pull Parser
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			 xpp = factory.newPullParser();
+
+			// Set the Parser's input to be the XML document in the HTTP Response
+			xpp.setInput(new InputStreamReader(response.getEntity()
+					.getContent()));
+			
+			// Get the first Parser event and start iterating over the XML document 
+			int eventType = xpp.getEventType();
+
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				String name = xpp.getName();
+				if (eventType == XmlPullParser.START_TAG) {
+					startTag(xpp.getName());
+				} else if (eventType == XmlPullParser.END_TAG) {
+					endTag(xpp.getName());
+				} else if (eventType == XmlPullParser.TEXT) {
+					text(xpp.getText());
+				}
+				eventType = xpp.next();
+			}
+			return mResults;
+		} catch (XmlPullParserException e) {
+		}
+		return null;
+	}
+
+	public void startTag(String localName) {
+		if (localName.equals(Country_TAG)) {
+			mIscountry = true;}
+			
+	}
+
+	public void text(String text) {
+		if (mIscountry) {
+			mcountry = text.trim();
+		}	
+	}
+
+	public void endTag(String localName) {
+		if (localName.equals(Country_TAG)) {
+			mIscountry = false;}
+			else if(localName.equals("temperature")){
+				mistemp = true;
+				mtemp = xpp.getAttributeValue(null, "value");
+				mResults.add(mtemp);
+				
+			}
+		
+		//else if (localName.equals("city")) {
+			//mResults.add(mcountry+ mtemp);
+			
+		//	mcountry= null;
+			//mtemp=null;
+			}
+		
+	
+}
