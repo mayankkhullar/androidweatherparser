@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 
 public class Networking extends Activity {
-   EditText ed1,ed2,ed3,ed4,ed5;
+   EditText ed1,ed2,ed3;
    
    private String url1 = "http://api.openweathermap.org/data/2.5/weather?q=";
-   private String url2 = "&mode=xml";
+   private String url2 = "&mode=xml&unit=metric";
    private XMLResponseHandler obj;
    Button b1;
    TextView tv;
