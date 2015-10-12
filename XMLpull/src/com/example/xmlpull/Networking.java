@@ -13,7 +13,7 @@ public class Networking extends Activity {
    EditText ed1,ed2,ed3;
    
    private String url1 = "http://api.openweathermap.org/data/2.5/weather?q=";
-   private String url2 = "&mode=xml&unit=metric";
+   private String url2 = "&mode=xml&unit=metric&appid=bd82977b86bf27fb59a04b61b657fb6f";
    private XMLResponseHandler obj;
    Button b1;
    TextView tv;
